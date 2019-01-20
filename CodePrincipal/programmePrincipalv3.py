@@ -78,10 +78,7 @@ def setText_norefresh(text):
 import time
 import grovepi
 import datetime 
-<<<<<<< HEAD
 import serial
-
-
 ser=serial.Serial( #brancher arduino sur port usb en bas a gauche
 	port='/dev/ttyACM0',
 	baudrate=9600,
@@ -90,16 +87,13 @@ ser=serial.Serial( #brancher arduino sur port usb en bas a gauche
 	bytesize=serial.EIGHTBITS,
 	timeout=1
 )
-=======
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
 
 
-# Connect the Grove Button to digital port D3
-# SIG,NC,VCC,GND
->>>>>>> 0a15031cc830cec7c527daebec27d8daf7d9e191
 button=3
-
 grovepi.pinMode(button,"INPUT")
-
 potentiometer = 0
 grovepi.pinMode(potentiometer,"INPUT")
 buzzer = 4 
@@ -129,7 +123,6 @@ def recommencer() :
               if grovepi.digitalRead(button)==1 :
                       p = p+1
         time.sleep(0.1)
-<<<<<<< HEAD
         nbe = (" Nombre de pompes : "+str(nb))
         mesurea=1
         setText("Mesure de la temperature")
@@ -142,61 +135,40 @@ def recommencer() :
                         tavant = ser.readline()
                         mesurea = 0
         debut=9
-	while debut != 0 :
-=======
-        nbe = ("Nombre de pompe : " + str(nb))
-        debut=9
-        //faire la mesure avec le capteur de temperature avant leffort
-        avant = "temperature corporelle avant effort : str(tavant)"
         while debut != 0 :
->>>>>>> 0a15031cc830cec7c527daebec27d8daf7d9e191
-                setText_norefresh("Debut de seance dans {}".format(str(debut)))
-                debut=debut-1
-                time.sleep(1)
-        textCommand(0x01)
-        time.sleep(0.1)
-        setRGB(250,0,0)
-        time.sleep(0.1)
-        setText_norefresh("{} pompes restantes".format(str(nb)))
-        time.sleep(.5)
-        cpt = nb #nombre de pompe a faire au depart 
+              setText_norefresh("Debut de seance dans {}".format(str(debut)))
+              debut=debut-1
+              time.sleep(1)
+              textCommand(0x01)
+              time.sleep(0.1)
+              setRGB(250,0,0)
+              time.sleep(0.1)
+              setText_norefresh("{} pompes restantes".format(str(nb)))
+              time.sleep(.5)
+              cpt = nb #nombre de pompe a faire au depart 
         while cpt!=0: 
-<<<<<<< HEAD
-                if grovepi.ultrasonicRead(ultrasonic_ranger)<10:
-=======
-                if grovepi.ultrasonicRead(ultrasonic_ranger)<15:
->>>>>>> 0a15031cc830cec7c527daebec27d8daf7d9e191
-				cpt=cpt-1
-				setText_norefresh("{} pompes restantes".format(str(cpt))) 
-				time.sleep(.1)
-				grovepi.digitalWrite(buzzer,1)
-				time.sleep(.2)
-				grovepi.digitalWrite(buzzer,0)
-				time.sleep(.1)
-				time.sleep(0.5)
+              if grovepi.ultrasonicRead(ultrasonic_ranger)<10:
+				            cpt=cpt-1
+				            setText_norefresh("{} pompes restantes".format(str(cpt))) 
+				            time.sleep(.1)
+			       	      grovepi.digitalWrite(buzzer,1)
+				            time.sleep(.2)
+				            grovepi.digitalWrite(buzzer,0)
+				            time.sleep(.1)
+	      time.sleep(0.5)
         grovepi.digitalWrite(buzzer,1)
-<<<<<<< HEAD
-	time.sleep(.8)
-	grovepi.digitalWrite(buzzer,0)
+	      time.sleep(.8)
+        grovepi.digitalWrite(buzzer,0)
         time.sleep(.4)
         mesureap=1
         setText("Mesure de la temperature")
         while mesureap != 0 :
-                if grovepi.ultrasonicRead(ultrasonic_ranger)<7:
-                        time.sleep(5)
-                        tapres = ser.readline()
-                        mesureap = 0
+              if grovepi.ultrasonicRead(ultrasonic_ranger)<7:
+                    time.sleep(5)
+                    tapres = ser.readline()
+                    mesureap = 0
         fichier = open("valeur.txt", "a")
         fichier.write(date +" ; "+nbe+" ; "+"temperature avant : "+tavant+" ; "+"temperature apres : "+tapres +"\n")
-=======
-        time.sleep(.8)
-        grovepi.digitalWrite(buzzer,0)
-        //faire la messure avec le capteur de température après leffort
-        apres = "temperature corporelle apres effort : str(tapres)"
-        fichier = open("valeur.txt", "a")
-        fichier.write(date + " ; " + nbe + "\n")
-        time.sleep(.4)
->>>>>>> 0a15031cc830cec7c527daebec27d8daf7d9e191
         setText("Voulez-vous recommencez ?")
         time.sleep(2)
         setText("Si oui maintenez le bouton")
@@ -224,49 +196,36 @@ while fin!=0:
 		time.sleep(3)
 		setText("combien de pompes ?")
 		while p != 1:
-                      sensor_value = grovepi.analogRead(potentiometer)
-                      time.sleep(0.8)
-                      nb = (int)((sensor_value)/10)
-                      setText_norefresh("Nombre de pompe : {} ".format(str(nb)))
-                      time.sleep(.1)
-                      if grovepi.digitalRead(button)==1 :
-                              p = p+1
-<<<<<<< HEAD
-                nbe = (" Nombre de pompes : "+str(nb))
-                time.sleep(0.1)
-                mesurea=1
-                setText("Mesure de la temperature")
-                while mesurea != 0 :
-                        if grovepi.ultrasonicRead(ultrasonic_ranger)<4:
-                                setText("Mesure en cours")
-                                tavant = ser.readline()
-                                print (tavant)
-                                time.sleep(3)
+      sensor_value = grovepi.analogRead(potentiometer)
+      time.sleep(0.8)
+      nb = (int)((sensor_value)/10)
+      setText_norefresh("Nombre de pompe : {} ".format(str(nb)))
+      time.sleep(.1)
+      if grovepi.digitalRead(button)==1 :
+        p = p+1
+        nbe = (" Nombre de pompes : "+str(nb))
+        time.sleep(0.1)
+        mesurea=1
+        setText("Mesure de la temperature")
+        while mesurea != 0 :
+          if grovepi.ultrasonicRead(ultrasonic_ranger)<4:
+            setText("Mesure en cours")
+            tavant = ser.readline()
+            print (tavant)
+            time.sleep(3)
 		debut=9
-=======
-                nbe = (" Nombre de pompe :"+" "+str(nb)
-		time.sleep(0.1)
-        nbe = ("Nombre de pompe : " + str(nb))
-		debut=9
-        //faire la mesure avec le capteur de temperature avant leffort
-        avant = "temperature corporelle avant effort : str(tavant)"
->>>>>>> 0a15031cc830cec7c527daebec27d8daf7d9e191
 		while debut != 0 :
-                        setText_norefresh("Debut de seance dans {}".format(str(debut)))
-                        debut=debut-1
-                        time.sleep(1)
-                textCommand(0x01)
-                time.sleep(.1)
-                setRGB(250,0,0)
+      setText_norefresh("Debut de seance dans {}".format(str(debut)))
+      debut=debut-1
+      time.sleep(1)
+    textCommand(0x01)
+    time.sleep(.1)
+    setRGB(250,0,0)
 		setText_norefresh("{} pompes restantes".format(str(nb)))
 		time.sleep(.5)
-                cpt = nb #nombre de pompe a faire au depart 
+    cpt = nb #nombre de pompe a faire au depart 
 		while cpt!=0: 
-<<<<<<< HEAD
-			if grovepi.ultrasonicRead(ultrasonic_ranger)<10:
-=======
-			if grovepi.ultrasonicRead(ultrasonic_ranger)<15:
->>>>>>> 0a15031cc830cec7c527daebec27d8daf7d9e191
+		  if grovepi.ultrasonicRead(ultrasonic_ranger)<10:
 				cpt=cpt-1
 				setText_norefresh("{} pompes restantes".format(str(cpt))) 
 				time.sleep(.1)
@@ -279,42 +238,52 @@ while fin!=0:
 		grovepi.digitalWrite(buzzer,1)
 		time.sleep(.8)
 		grovepi.digitalWrite(buzzer,0)
-<<<<<<< HEAD
-                time.sleep(.4)
-                mesureap=1
-                setText("Mesure de la temperature")
-                while mesureap != 0 :
-                        if grovepi.ultrasonicRead(ultrasonic_ranger)<7:
-                                time.sleep(5)
-                                tapres = ser.readline()
-                                mesureap = 0
-                fichier = open("valeur.txt", "a")
-                fichier.write(date +" ; "+nbe+" ; "+"temperature avant : "+tavant+" ; "+"temperature apres : "+tapres +"\n")
-=======
-        //faire la messure avec le capteur de température après leffort
-        apres = "temperature corporelle apres effort : str(tapres)"
-        fichier = open("valeur.txt", "a")
-        fichier.write(date + " ; " + nbe + "\n")
-                time.sleep(.4)
->>>>>>> 0a15031cc830cec7c527daebec27d8daf7d9e191
-                setText("Voulez-vous recommencez ?")
-                time.sleep(2)
-                setText("Si oui maintenez\nle bouton")
-                while r != 4 :
-                        r = r+1
-                        time.sleep(1)
-                        if grovepi.digitalRead(button)==1 :
-                                recommencer()
-                                r=4
-                time.sleep(.1)
-                setRGB(0,250,0)
-                time.sleep(0.1)
-                setText("Vous avez \n termine !")
-                time.sleep(2)
-                textCommand(0x01)
-                time.sleep(.1)
-                setRGB(0,0,0)
-                time.sleep(.1)
-                fin = fin-1
-
-
+    time.sleep(.4)
+    mesureap=1
+    setText("Mesure de la temperature")
+    while mesureap != 0 :
+      if grovepi.ultrasonicRead(ultrasonic_ranger)<7:
+        time.sleep(5)
+        tapres = ser.readline()
+        mesureap = 0
+    fichier = open("valeur.txt", "a")
+    fichier.write(date +" ; "+nbe+" ; "+"temperature avant : "+tavant+" ; "+"temperature apres : "+tapres +"\n")
+    setText("Voulez-vous recommencez ?")
+    time.sleep(2)
+    setText("Si oui maintenez\nle bouton")
+    while r != 4 :
+      r = r+1
+      time.sleep(1)
+      if grovepi.digitalRead(button)==1 :
+        recommencer()
+        r=4
+    time.sleep(.1)
+    setRGB(0,250,0)
+    time.sleep(0.1)
+    setText("Vous avez \n termine !")
+    msg = MIMEMultipart()
+ 
+    msg['From'] = 'pushup.coach@gmail.com'
+    msg['To'] = 'louis.soleilhavoup@gmail.com'
+    msg['Subject'] = 'Félicitation pour votre session' 
+    body = "Ci-joint, vos résultats de votre session d'aujourd'hui ainsi que les précédentes \n Bonne continuation." 
+    msg.attach(MIMEText(body, 'plain')) 
+    filename = "valeur.txt"
+    attachment = open("a modifier", "rb") 
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload((attachment).read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename) 
+    msg.attach(part) 
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login("pushup.coach@gmail.com", "pushupcoachIG3")
+    text = msg.as_string()
+    server.sendmail("pushup.coach@gmail.com", 'louis.soleilhavoup@gmail.com', text)
+    server.quit()
+    time.sleep(2)
+    textCommand(0x01)
+    time.sleep(.1)
+    setRGB(0,0,0)
+    time.sleep(.1)
+    fin = fin-1
