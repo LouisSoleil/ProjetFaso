@@ -119,7 +119,7 @@ def recommencer() :
         while p != 1:
               sensor_value = grovepi.analogRead(potentiometer)
               time.sleep(0.8)
-              nb = (int)((sensor_value)/10)
+              nb = (int)((sensor_value)/20)
               setText_norefresh("Nombre de pompe : {} ".format(str(nb)))
               time.sleep(.1)
               if grovepi.digitalRead(button)==1 :
@@ -128,47 +128,49 @@ def recommencer() :
         nbe = (" Nombre de pompes : "+str(nb))
         mesurea=1
         setText("Mesure de la temperature")
+        time.sleep(2)
         while mesurea != 0 :
-                x=ser.readline()
-                time.sleep(2)
-                if grovepi.ultrasonicRead(ultrasonic_ranger)<7:
-                        setText("Mesure en cours")
-                        time.sleep(5)
-                        tavant = ser.readline()
-                        mesurea = 0
+                while grovepi.ultrasonicRead(ultrasonic_ranger)<7:
+                                setText("Mesure en cours")
+                                tavant = ser.readline()
+                                time.sleep(1)
+                                if grovepi.ultrasonicRead(ultrasonic_ranger)>4:
+                                        mesurea = 0
         debut=9
         while debut != 0 :
               setText_norefresh("Debut de seance dans {}".format(str(debut)))
               debut=debut-1
               time.sleep(1)
-              textCommand(0x01)
-              time.sleep(0.1)
-              setRGB(250,0,0)
-              time.sleep(0.1)
-              setText_norefresh("{} pompes restantes".format(str(nb)))
-              time.sleep(.5)
-              cpt = nb #nombre de pompe a faire au depart 
-        while cpt!=0: 
-              if grovepi.ultrasonicRead(ultrasonic_ranger)<10:
-				            cpt=cpt-1
-				            setText_norefresh("{} pompes restantes".format(str(cpt))) 
-				            time.sleep(.1)
-			       	      grovepi.digitalWrite(buzzer,1)
-				            time.sleep(.2)
-				            grovepi.digitalWrite(buzzer,0)
-				            time.sleep(.1)
-	      time.sleep(0.5)
+        textCommand(0x01)
+        time.sleep(0.1)
+        setRGB(250,0,0)
+        time.sleep(0.1)
+        setText_norefresh("{} pompes restantes".format(str(nb)))
+        time.sleep(.5)
+        cpt = nb #nombre de pompe a faire au depart 
+        while cpt!=0:
+                if grovepi.ultrasonicRead(ultrasonic_ranger)<10:
+                      cpt=cpt-1
+                      setText_norefresh("{} pompes restantes".format(str(cpt)))
+                      time.sleep(.1)
+                      grovepi.digitalWrite(buzzer,1)
+                      time.sleep(.2)
+                      grovepi.digitalWrite(buzzer,0)
+                      time.sleep(.1)
+                      time.sleep(0.5)
         grovepi.digitalWrite(buzzer,1)
-	      time.sleep(.8)
+        time.sleep(.8)
         grovepi.digitalWrite(buzzer,0)
         time.sleep(.4)
         mesureap=1
         setText("Mesure de la temperature")
         while mesureap != 0 :
-              if grovepi.ultrasonicRead(ultrasonic_ranger)<7:
-                    time.sleep(5)
-                    tapres = ser.readline()
-                    mesureap = 0
+              while grovepi.ultrasonicRead(ultrasonic_ranger)<7:
+                                setText("Mesure en cours")
+                                tapres = ser.readline()
+                                time.sleep(1)
+                                if grovepi.ultrasonicRead(ultrasonic_ranger)>4:
+                                        mesureap = 0
         fichier = open("valeur.txt", "a")
         fichier.write(date +" ; "+nbe+" ; "+"temperature avant : "+tavant+" ; "+"temperature apres : "+tapres +"\n")
         setText("Voulez-vous recommencez ?")
@@ -192,97 +194,102 @@ def recommencer() :
 
 
 while fin!=0: 
-	if grovepi.digitalRead(button)==1 : 
+        if grovepi.digitalRead(button)==1 : 
 		setRGB(250,0,250)
 		setText("Bonjour Louis")
 		time.sleep(3)
 		setText("combien de pompes ?")
-		while p != 1:
-      sensor_value = grovepi.analogRead(potentiometer)
-      time.sleep(0.8)
-      nb = (int)((sensor_value)/10)
-      setText_norefresh("Nombre de pompe : {} ".format(str(nb)))
-      time.sleep(.1)
-      if grovepi.digitalRead(button)==1 :
-        p = p+1
-        nbe = (" Nombre de pompes : "+str(nb))
-        time.sleep(0.1)
-        mesurea=1
-        setText("Mesure de la temperature")
-        while mesurea != 0 :
-          if grovepi.ultrasonicRead(ultrasonic_ranger)<4:
-            setText("Mesure en cours")
-            tavant = ser.readline()
-            print (tavant)
-            time.sleep(3)
-		debut=9
-		while debut != 0 :
-      setText_norefresh("Debut de seance dans {}".format(str(debut)))
-      debut=debut-1
-      time.sleep(1)
-    textCommand(0x01)
-    time.sleep(.1)
-    setRGB(250,0,0)
-		setText_norefresh("{} pompes restantes".format(str(nb)))
-		time.sleep(.5)
-    cpt = nb #nombre de pompe a faire au depart 
-		while cpt!=0: 
-		  if grovepi.ultrasonicRead(ultrasonic_ranger)<10:
-				cpt=cpt-1
-				setText_norefresh("{} pompes restantes".format(str(cpt))) 
-				time.sleep(.1)
-				grovepi.digitalWrite(buzzer,1)
-				time.sleep(.2)
-				grovepi.digitalWrite(buzzer,0)
-				time.sleep(.1)
-				time.sleep(0.5)
-		time.sleep(0.5)
+		time.sleep(.2)
+                while p != 1:
+                        sensor_value = grovepi.analogRead(potentiometer)
+                        time.sleep(0.8)
+                        nb = (int)((sensor_value)/10)
+                        setText_norefresh("Nombre de pompe : {} ".format(str(nb)))
+                        time.sleep(.1)
+                        if grovepi.digitalRead(button)==1 :
+                                nbe = (" Nombre de pompes : "+str(nb))
+                                p = p+1
+                                time.sleep(0.1)
+                mesurea=1
+                setText("Mesure de la temperature")
+                time.sleep(2)
+                while mesurea != 0 :
+                        while grovepi.ultrasonicRead(ultrasonic_ranger)<7:
+                                setText("Mesure en cours")
+                                tavant = ser.readline()
+                                time.sleep(1)
+                                if grovepi.ultrasonicRead(ultrasonic_ranger)>4:
+                                        mesurea = 0
+                debut=9
+                while debut != 0 :
+                        setText_norefresh("Debut de seance dans {}".format(str(debut)))
+                        debut=debut-1
+                        time.sleep(1)
+                textCommand(0x01)
+                time.sleep(.1)
+                setRGB(250,0,0)
+                setText_norefresh("{} pompes restantes".format(str(nb)))
+                time.sleep(.5)
+                cpt = nb #nombre de pompe a faire au depart 
+                while cpt!=0: 
+                        if grovepi.ultrasonicRead(ultrasonic_ranger)<10:
+                                cpt=cpt-1
+                                setText_norefresh("{} pompes restantes".format(str(cpt))) 
+                                time.sleep(.1)
+                                grovepi.digitalWrite(buzzer,1)
+                                time.sleep(.2)
+                                grovepi.digitalWrite(buzzer,0)
+                                time.sleep(.1)
+                                time.sleep(0.5)
 		grovepi.digitalWrite(buzzer,1)
 		time.sleep(.8)
 		grovepi.digitalWrite(buzzer,0)
-    time.sleep(.4)
-    mesureap=1
-    setText("Mesure de la temperature")
-    while mesureap != 0 :
-      if grovepi.ultrasonicRead(ultrasonic_ranger)<7:
-        time.sleep(5)
-        tapres = ser.readline()
-        mesureap = 0
-    fichier = open("valeur.txt", "a")
-    fichier.write(date +" ; "+nbe+" ; "+"temperature avant : "+tavant+" ; "+"temperature apres : "+tapres +"\n")
-    setText("Voulez-vous recommencez ?")
-    time.sleep(2)
-    setText("Si oui maintenez\nle bouton")
-    while r != 4 :
-      r = r+1
-      time.sleep(1)
-      if grovepi.digitalRead(button)==1 :
-        recommencer()
-        r=4
-    time.sleep(.1)
-    setRGB(0,250,0)
-    time.sleep(0.1)
-    msg = MIMEMultipart()
-    msg['From'] = 'pushup.coach@gmail.com'
-    msg['To'] = 'louis.soleilhavoup@gmail.com'
-    msg['Subject'] = 'Felicitation pour votre session'
-    message = "Ci-joint, vos resultats de votre session d'aujourd'hui ainsi que les precedentes \n \nBonne continuation."
-    msg.attach(MIMEText(message))
-    filename = "valeur.txt"
-    attachment = open("/home/pi/Desktop/ProjetFaso/CodePrincipal/valeur.txt", "rb")
-    part = MIMEBase('application', 'octet-stream')
-    part.set_payload((attachment).read()
-    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-    msg.attach(part)
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login("pushup.coach@gmail.com", "pushupcoachIG3")
-    text = msg.as_string()
-    server.sendmail("pushup.coach@gmail.com", 'louis.soleilhavoup@gmail.com', msg.as_string())
-    server.quit()
-    time.sleep(2)
-    textCommand(0x01)
-    time.sleep(.1)
-    setRGB(0,0,0)
-    time.sleep(.1)
-    fin = fin-1
+                time.sleep(.4)
+                mesureap=1
+                setText("Mesure de la temperature")
+                while mesureap != 0 :
+                        while grovepi.ultrasonicRead(ultrasonic_ranger)<7:
+                                setText("Mesure en cours")
+                                tapres = ser.readline()
+                                time.sleep(1)
+                                if grovepi.ultrasonicRead(ultrasonic_ranger)>4:
+                                        mesureap = 0
+                fichier = open("valeur.txt", "a")
+                fichier.write(date +" ; "+nbe+" ; "+"temperature avant : "+tavant+" ; "+"temperature apres : "+tapres +"\n")
+                setText("Voulez-vous recommencez ?")
+                time.sleep(2)
+                setText("Si oui maintenez\nle bouton")
+                while r != 4 :
+                        r = r+1
+                        time.sleep(1)
+                        if grovepi.digitalRead(button)==1 :
+                                recommencer()
+                                r=4
+                time.sleep(.1)
+                setRGB(0,250,0)
+                setText("Vous avez\ntermine !")
+                time.sleep(0.1)
+                msg = MIMEMultipart()
+                msg['From'] = 'pushup.coach@gmail.com'
+                msg['To'] = 'louis.soleilhavoup@gmail.com'
+                msg['Subject'] = 'Felicitation pour votre session'
+                message = "Ci-joint, vos resultats de votre session d'aujourd'hui ainsi que les precedentes \n \nBonne continuation."
+                msg.attach(MIMEText(message))
+                filename = "valeur.txt"
+                attachment = open("/home/pi/Desktop/ProjetFaso/CodePrincipal/valeur.txt", "rb")
+                part = MIMEBase('application', 'octet-stream')
+                part.set_payload((attachment).read()
+                part.add_header("Content-Disposition", "attachment; filename= %s" % filename)
+                msg.attach(part)
+                server = smtplib.SMTP('smtp.gmail.com', 587)
+                server.starttls()
+                server.login("pushup.coach@gmail.com", "pushupcoachIG3")
+                text = msg.as_string()
+                server.sendmail("pushup.coach@gmail.com", 'louis.soleilhavoup@gmail.com', msg.as_string())
+                server.quit()
+                time.sleep(2)
+                textCommand(0x01)
+                time.sleep(.1)
+                setRGB(0,0,0)
+                time.sleep(.1)
+                fin = fin-1
